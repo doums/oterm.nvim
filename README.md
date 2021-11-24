@@ -1,7 +1,7 @@
-## floaterm.nvim
+## oterm.nvim
 
-A [neovim](https://neovim.io/) plugin to open terminal in floating
-window.
+A [neovim](https://neovim.io/) plugin to open terminal quickly and
+nicely.
 
 ### Install
 
@@ -10,7 +10,7 @@ Use your plugin manager
 ```lua
 require('paq')({
   -- ...
-  'doums/floaterm.nvim',
+  'doums/oterm.nvim',
 })
 ```
 
@@ -18,10 +18,10 @@ Or use the native packages (`:h packages`).
 
 ### Configuration
 
-You can configure Floaterm globally via the `setup` function:
+You can configure Oterm globally via the `setup` function:
 
 ```lua
-require('floaterm').setup({
+require('oterm').setup({
   layout = 'bottom',
   width = 1,
   height = 0.4,
@@ -30,34 +30,24 @@ require('floaterm').setup({
 ```
 
 All default values are listed
-[here](https://github.com/doums/floaterm.nvim/blob/main/lua/floaterm/config.lua).
+[here](https://github.com/doums/oterm.nvim/blob/main/lua/oterm/config.lua).
 
 ```lua
 local _config = {
   -- The command to run as a job, if nil run the 'shell'.
   command = nil, -- string or list of string
-  -- The placement in the editor of the floating window.
-  layout = 'center', -- center | bottom | top | left | right
-  -- The width/height of the window. Must be a value between 0.1
-  -- and 1, 1 corresponds to 100% of the editor width/height.
-  width = 0.8,
-  height = 0.8,
-  -- Offset in character cells of the window, relative to the
-  -- layout.
-  row = 0,
-  col = 0,
-  -- Options passed to nvim_open_win (:h nvim_open_win())
-  -- You can use it to customize various things like border etc.
-  win_api = { style = 'minimal', relative = 'editor' },
+  -- The placement in the editor of the new terminal window.
+  -- hsplit, split horizontally the current window
+  -- vsplit, split vertically the current window
+  layout = 'hsplit',
   -- Some mapping, exit: close the job and the window, normal:
   -- switch to normal mode
   keymaps = { exit = '<A-q>', normal = '<A-n>' },
-  -- Terminal buffer name
-  name = 'fterm',
-  -- Background color, default use the color from NormalFloat
+  -- Custom background color, default use the color from Normal
+  -- highlight group
   bg_color = nil, -- as hex color string eg. #212121
-  -- Border highlight group, default FloatBorder
-  border_hl = nil,
+  -- Custom VertSplit highlight group
+  split_hl = nil,
 }
 ```
 

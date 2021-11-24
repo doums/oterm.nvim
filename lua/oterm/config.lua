@@ -7,16 +7,17 @@ local _config = {
   -- The command to run as a job, if nil run the 'shell'.
   command = nil, -- string or list of string
   -- The placement in the editor of the new terminal window.
-  -- hsplit = x, split horizontally the current window and x
-  -- is the height of the terminal window as a percentage
-  -- vsplit = x, split vertically the current window and x is
-  -- the width of the terminal window as a percentage
+  -- hsplit, split horizontally the current window
+  -- vsplit, split vertically the current window
   layout = 'hsplit',
   -- Some mapping, exit: close the job and the window, normal:
   -- switch to normal mode
   keymaps = { exit = '<A-q>', normal = '<A-n>' },
-  -- Background color, default use the color from NormalFloat
+  -- Custom background color, default use the color from Normal
+  -- highlight group
   bg_color = nil, -- as hex color string eg. #212121
+  -- Custom VertSplit highlight group
+  split_hl = nil,
 }
 
 local function init(config)

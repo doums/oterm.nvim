@@ -51,7 +51,10 @@ local function set_hl(config)
   if config.bg_color then
     -- TODO use api.nvim_set_hl instead
     cmd('hi! otermWin guibg=' .. config.bg_color)
-    opt.winhighlight:prepend('NormalFloat:otermWin,')
+    opt.winhighlight:prepend('Normal:otermWin,')
+  end
+  if config.split_hl then
+    opt.winhighlight:prepend(string.format('VertSplit:%s,', config.split_hl))
   end
 end
 
@@ -61,7 +64,6 @@ local function open(config)
     vim.deepcopy(_config.get_config()),
     config or {}
   )
-  print(vim.inspect(config))
   local term = { on_exit = config.on_exit }
   term.window = create_window(config)
   term.buffer = api.nvim_get_current_buf()
