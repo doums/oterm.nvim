@@ -22,10 +22,8 @@ You can configure Oterm globally via the `setup` function:
 
 ```lua
 require('oterm').setup({
-  layout = 'bottom',
-  width = 1,
-  height = 0.4,
   bg_color = '#211a16',
+  split_hl = 'otermSplit',
 })
 ```
 
@@ -54,11 +52,8 @@ local _config = {
 And you can override it by call:
 
 ```lua
-map(
-  'n',
-  '<M-n>',
-  [[<cmd>lua require'floaterm'.open({name='nnn',layout='center',height=0.7,width=0.6,command='nnn'})<cr>]]
-)
+map('n', '<M-t>', [[<cmd>lua require'oterm'.open()<cr>]])
+map('n', '<M-v>', [[<cmd>lua require'oterm'.open({layout='vsplit'})<cr>]])
 ```
 
 NOTE: You can add more custom options in the config to configure
@@ -71,18 +66,12 @@ You can create the mappings you want to spawn shell or commands in
 different ways:
 
 ```lua
-map('n', '<M-t>', [[<cmd>lua require'floaterm'.open({row=1})<cr>]])
-map(
-  'n',
-  '<M-n>',
-  [[<cmd>lua require'floaterm'.open({name='nnn',layout='center',height=0.7,width=0.6,command='nnn'})<cr>]]
-)
+map('n', '<M-t>', [[<cmd>Ot<cr>]])
+map('n', '<M-v>', [[<cmd>lua require'oterm'.open({layout='vsplit'})<cr>]])
 ```
 
-You can also use the command `:Fterm` to spawn a shell/command
-using the global config.
+You can also use the commands `:Oterm [command]` and `:Ot [command]`.
 
 ### License
 
 Mozilla Public License 2.0
-

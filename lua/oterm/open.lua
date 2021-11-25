@@ -27,10 +27,14 @@ local layout_map = {
 }
 
 local function create_window(config)
-  for layout, command in pairs(layout_map) do
-    if config.layout == layout then
-      cmd(command)
-      break
+  if config.mods and #config.mods > 0 then
+    cmd(config.mods .. ' new')
+  else
+    for layout, command in pairs(layout_map) do
+      if config.layout == layout then
+        cmd(command)
+        break
+      end
     end
   end
   local win = api.nvim_get_current_win()
@@ -69,6 +73,9 @@ local function open(config)
   term.buffer = api.nvim_get_current_buf()
   set_hl(config)
   config.on_exit = on_exit
+  if type(config.command) == 'string' and #config.command == 0 then
+    config.command = nil
+  end
   local job_id = fn.termopen(config.command or { opt.shell:get() }, config)
   create_keymaps(term.buffer, {
     [config.keymaps.exit] = '<Cmd>call jobstop(' .. job_id .. ')<CR>',
