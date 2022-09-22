@@ -22,7 +22,7 @@ You can configure Oterm globally via the `setup` function:
 
 ```lua
 require('oterm').setup({
-  bg_color = '#211a16',
+  terminal_color = 'oterm',
   split_hl = 'otermSplit',
 })
 ```
@@ -41,9 +41,12 @@ local _config = {
   -- Some mapping, exit: close the job and the window, normal:
   -- switch to normal mode
   keymaps = { exit = '<A-q>', normal = '<A-n>' },
-  -- Custom background color, default use the color from Normal
-  -- highlight group
-  bg_color = nil, -- as hex color string eg. #212121
+  -- Terminal highlight group, default Normal
+  -- With it you can customize the background and default
+  -- foreground color since `{g,b}:terminal_color_x` will be used
+  -- as well for foreground, based on ANSI sequences
+  -- (see :h terminal TERMINAL COLORS)
+  terminal_hl = nil,
   -- Custom VertSplit highlight group
   split_hl = nil,
 }

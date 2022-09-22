@@ -6,14 +6,19 @@ local api = vim.api
 local fn = vim.fn
 local cmd = vim.cmd
 local opt = vim.opt
+local uv = vim.loop
 
 local _config = require('oterm.config')
 
 local terms = {}
 
 local function on_exit(id, code)
-  api.nvim_win_close(terms[id].window, true)
-  api.nvim_buf_delete(terms[id].buffer, { force = true })
+  if api.nvim_win_is_valid(terms[id].window) then
+    api.nvim_win_close(terms[id].window, true)
+  end
+  if api.nvim_buf_is_valid(terms[id].buffer) then
+    api.nvim_buf_delete(terms[id].buffer, { force = true })
+  end
   if type(terms[id].on_exit) == 'function' then
     terms[id].on_exit(id, code)
   end
@@ -37,25 +42,23 @@ local function create_window(config)
       end
     end
   end
-  local win = api.nvim_get_current_win()
-  api.nvim_win_set_option(win, 'number', false)
-  api.nvim_win_set_option(win, 'relativenumber', false)
-  api.nvim_win_set_option(win, 'signcolumn', 'no')
+  vim.wo.number = false
+  vim.wo.relativenumber = false
+  vim.wo.signcolumn = 'no'
   return api.nvim_get_current_win()
 end
 
 local function create_keymaps(buffer, mapping)
   for lhs, rhs in pairs(mapping) do
-    api.nvim_buf_set_keymap(buffer, 'n', lhs, rhs, { noremap = true })
-    api.nvim_buf_set_keymap(buffer, 't', lhs, rhs, { noremap = true })
+    vim.keymap.set({ 'n', 't' }, lhs, rhs, { buffer = buffer })
   end
 end
 
 local function set_hl(config)
-  if config.bg_color then
-    -- TODO use api.nvim_set_hl instead
-    cmd('hi! otermWin guibg=' .. config.bg_color)
-    opt.winhighlight:prepend('Normal:otermWin,')
+  if config.terminal_hl then
+    vim.opt_local.winhighlight:prepend(
+      string.format('Normal:%s,', config.terminal_hl)
+    )
   end
   if config.split_hl then
     opt.winhighlight:prepend(string.format('VertSplit:%s,', config.split_hl))
@@ -81,6 +84,10 @@ local function open(config)
     [config.keymaps.exit] = '<Cmd>call jobstop(' .. job_id .. ')<CR>',
     [config.keymaps.normal] = '<C-\\><C-N>',
   })
+  api.nvim_buf_set_name(
+    term.buffer,
+    string.format('%s‹%s›', config.name, uv.random(2))
+  )
   if job_id == 0 then
     api.nvim_err_writeln(
       '[oterm] termopen() failed, invalid argument (or job table is full)'
