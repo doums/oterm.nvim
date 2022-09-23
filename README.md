@@ -93,7 +93,7 @@ local open = require('oterm').open
 
 vim.keymap.set.map('n', '<M-t>', function() open() end)
 vim.keymap.set.map('n', '<M-v>', function() open({layout='vsplit'}) end)
-vim.keymap.set.map('n', '<M-f>', function() open({floating=true}) end)
+vim.keymap.set.map('n', '<M-f>', function() open({floating=true,layout='center'}) end)
 
 -- spawn nnn in a floating window
 vim.keymap.set('n', '<M-n>', function()

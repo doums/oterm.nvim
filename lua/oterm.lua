@@ -11,13 +11,12 @@ vim.cmd(
 vim.cmd(
   [[command -nargs=* -complete=shellcmd Ot lua require('oterm').open({command=<q-args>})]]
 )
--- TODO fix
--- vim.cmd(
---   [[command -nargs=* -complete=shellcmd Otermf lua require('oterm').open({command=<q-args>,floating=true})]]
--- )
--- vim.cmd(
---   [[command -nargs=* -complete=shellcmd Otf lua require('oterm').open({command=<q-args>,floating=true})]]
--- )
+vim.cmd(
+  [[command -nargs=* -complete=shellcmd Otermf lua require('oterm').open({command=<q-args>,floating=true,layout='center'})]]
+)
+vim.cmd(
+  [[command -nargs=* -complete=shellcmd Otf lua require('oterm').open({command=<q-args>,floating=true,layout='center'})]]
+)
 
 local function setup(config)
   _config.init(config)
