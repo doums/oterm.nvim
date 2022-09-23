@@ -6,11 +6,18 @@ local _config = require('oterm.config')
 local open = require('oterm.open')
 
 vim.cmd(
-  [[command -nargs=* -complete=shellcmd Oterm lua require('oterm').open({mods=<q-mods>,command=<q-args>})]]
+  [[command -nargs=* -complete=shellcmd Oterm lua require('oterm').open({command=<q-args>})]]
 )
 vim.cmd(
-  [[command -nargs=* -complete=shellcmd Ot lua require('oterm').open({mods=<q-mods>,command=<q-args>})]]
+  [[command -nargs=* -complete=shellcmd Ot lua require('oterm').open({command=<q-args>})]]
 )
+-- TODO fix
+-- vim.cmd(
+--   [[command -nargs=* -complete=shellcmd Otermf lua require('oterm').open({command=<q-args>,floating=true})]]
+-- )
+-- vim.cmd(
+--   [[command -nargs=* -complete=shellcmd Otf lua require('oterm').open({command=<q-args>,floating=true})]]
+-- )
 
 local function setup(config)
   _config.init(config)

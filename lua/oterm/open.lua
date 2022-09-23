@@ -9,6 +9,7 @@ local opt = vim.opt
 local uv = vim.loop
 
 local _config = require('oterm.config')
+local open_win = require('oterm.window').open_win
 
 local terms = {}
 
@@ -25,29 +26,6 @@ local function on_exit(id, code)
   terms[id] = nil
 end
 
-local layout_map = {
-  tab = 'tabnew',
-  hsplit = 'new',
-  vsplit = 'vnew',
-}
-
-local function create_window(config)
-  if config.mods and #config.mods > 0 then
-    cmd(config.mods .. ' new')
-  else
-    for layout, command in pairs(layout_map) do
-      if config.layout == layout then
-        cmd(command)
-        break
-      end
-    end
-  end
-  vim.wo.number = false
-  vim.wo.relativenumber = false
-  vim.wo.signcolumn = 'no'
-  return api.nvim_get_current_win()
-end
-
 local function create_keymaps(buffer, mapping)
   for lhs, rhs in pairs(mapping) do
     vim.keymap.set({ 'n', 't' }, lhs, rhs, { buffer = buffer })
@@ -55,13 +33,19 @@ local function create_keymaps(buffer, mapping)
 end
 
 local function set_hl(config)
-  if config.terminal_hl then
-    vim.opt_local.winhighlight:prepend(
-      string.format('Normal:%s,', config.terminal_hl)
-    )
-  end
-  if config.split_hl then
-    opt.winhighlight:prepend(string.format('VertSplit:%s,', config.split_hl))
+  local hl_map = {
+    floating = {
+      ['NormalFloat'] = config.terminal_hl,
+      ['FloatBorder'] = config.border_hl,
+    },
+    normal = {
+      ['Normal'] = config.terminal_hl,
+      ['VertSplit'] = config.split_hl,
+    },
+  }
+  local hls = config.floating and hl_map.floating or hl_map.normal
+  for hl, value in pairs(hls) do
+    vim.opt_local.winhighlight:prepend(string.format('%s:%s,', hl, value))
   end
 end
 
@@ -72,8 +56,7 @@ local function open(config)
     config or {}
   )
   local term = { on_exit = config.on_exit }
-  term.window = create_window(config)
-  term.buffer = api.nvim_get_current_buf()
+  term.window, term.buffer = unpack(open_win(config))
   set_hl(config)
   config.on_exit = on_exit
   if type(config.command) == 'string' and #config.command == 0 then
