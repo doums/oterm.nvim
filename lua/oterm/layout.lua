@@ -6,6 +6,14 @@ local opt = vim.opt
 
 local M = {}
 
+local floating_layouts = {
+  'center',
+  'bottom',
+  'top',
+  'left',
+  'right',
+}
+
 function M.get_floating_layout(config)
   local screen_w = opt.columns:get()
   local screen_h = opt.lines:get() - opt.cmdheight:get()
@@ -53,6 +61,10 @@ function M.get_floating_layout(config)
     },
   }
   return layouts[config.layout]
+end
+
+function M.is_floating(layout)
+  return vim.tbl_contains(floating_layouts, layout)
 end
 
 M.layout_map = {

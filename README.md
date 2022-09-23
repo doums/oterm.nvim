@@ -37,13 +37,10 @@ local _config = {
   command = nil, -- string or list of string
   -- Terminal buffer name
   name = 'oterm',
-  -- Spawn terminal in a floating window (floating mode)
-  floating = false,
   -- The placement in the editor of the new terminal window.
-  -- hsplit, split horizontally the current window
-  -- vsplit, split vertically the current window
+  -- hsplit, vsplit split horizontally/vertically the current window
   -- tab, open in a new tab
-  -- For floating mode: center | bottom | top | left | right
+  -- Floating layouts: center | bottom | top | left | right
   layout = 'hsplit',
   -- Some mapping, exit: close the job and the window
   -- normal: switch to normal mode
@@ -61,7 +58,7 @@ local _config = {
   -- exits. It will receive the job ID and exit code as argument.
 
   ----------------------------------------------------------------
-  -- The rest of the config is related to floating mode only.
+  -- The rest of the config is related to floating layouts.
 
   -- The width/height of the window. Must be a value between 0.1
   -- and 1, 1 corresponds to 100% of the editor width/height.
@@ -93,16 +90,15 @@ local open = require('oterm').open
 
 vim.keymap.set.map('n', '<M-t>', function() open() end)
 vim.keymap.set.map('n', '<M-v>', function() open({layout='vsplit'}) end)
-vim.keymap.set.map('n', '<M-f>', function() open({floating=true,layout='center'}) end)
+vim.keymap.set.map('n', '<M-f>', function() open({layout='center'}) end)
 
--- spawn nnn in a floating window
+-- spawn nnn in a centered floating window
 vim.keymap.set('n', '<M-n>', function()
   open({
-    floating = true,
     name = 'nnn',
     layout = 'center',
-    height = 0.7,
-    width = 0.6,
+    height = 0.7, -- 70% height of nvim size
+    width = 0.6, -- 60% width of nvim size
     command = 'nnn',
   })
 end)

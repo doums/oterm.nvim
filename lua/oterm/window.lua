@@ -5,26 +5,23 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/. ]]
 local api = vim.api
 local get_floating_layout = require('oterm.layout').get_floating_layout
 local layout_map = require('oterm.layout').layout_map
+local is_floating = require('oterm.layout').is_floating
 
 local M = {}
 
 function M.open_win(config)
   local buffer
   local window
-  if config.floating then
+  local layout = config.layout or 'vsplit'
+  if is_floating(layout) then
     buffer = api.nvim_create_buf(true, false)
     local win_options = config.win_api
-    if config.layout then
-      win_options = vim.tbl_deep_extend(
-        'force',
-        config.win_api,
-        get_floating_layout(config)
-      )
-    end
+    win_options =
+      vim.tbl_deep_extend('force', config.win_api, get_floating_layout(config))
     window = api.nvim_open_win(buffer, true, win_options)
   else
-    for layout, command in pairs(layout_map) do
-      if config.layout == layout then
+    for l, command in pairs(layout_map) do
+      if layout == l then
         vim.cmd(command)
         break
       end
