@@ -23,6 +23,7 @@ function M.open_win(config)
     for l, command in pairs(layout_map) do
       if layout == l then
         vim.cmd(command)
+        vim.wo.winfixheight = true
         break
       end
     end
