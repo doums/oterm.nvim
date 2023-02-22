@@ -22,8 +22,9 @@ You can configure Oterm globally via the `setup` function:
 
 ```lua
 require('oterm').setup({
-  terminal_color = 'oterm',
-  split_hl = 'otermSplit',
+  win_api = {
+    border = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' },
+  },
 })
 ```
 
@@ -45,14 +46,16 @@ local _config = {
   -- Some mapping, exit: close the job and the window
   -- normal: switch to normal mode
   keymaps = { exit = '<A-q>', normal = '<A-n>' },
-  -- Terminal highlight group, default Normal
-  -- With it you can customize the background and default
-  -- foreground color since `{g,b}:terminal_color_x` will be used
-  -- as well for foreground, based on ANSI sequences
-  -- (see :h terminal TERMINAL COLORS)
-  terminal_hl = nil,
-  -- Custom VertSplit highlight group
-  split_hl = nil,
+  -- Highlight group for the terminal window,
+  -- links to NormalFloat by default
+  -- Use it to customize the background and default foreground 
+  -- colors.
+  -- Note that `g:terminal_color_x` will be used
+  -- (see :h terminal - TERMINAL COLORS)
+  hl_win = 'otermWin',
+  -- Highlight group for horizontal and vertical splits
+  -- links to WinSeparator by default
+  hl_split = 'otermSplit',
 
   -- `on_exit` a optional function to call when the terminal's job
   -- exits. It will receive the job ID and exit code as argument.
@@ -71,8 +74,8 @@ local _config = {
   -- Options passed to nvim_open_win (:h nvim_open_win())
   -- You can use it to customize various things like border etc.
   win_api = { style = 'minimal', relative = 'editor' },
-  -- Border highlight group, default FloatBorder
-  border_hl = nil,
+  -- Highlight group for borders, links to FloatBorder by default
+  hl_border = 'otermBorder',
 }
 ```
 

@@ -2,6 +2,8 @@
 -- License, v. 2.0. If a copy of the MPL was not distributed with this
 -- file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+local M = {}
+
 -- default configuration
 local _config = {
   -- The command to run as a job, if nil run the 'shell'.
@@ -16,14 +18,16 @@ local _config = {
   -- Some mapping, exit: close the job and the window
   -- normal: switch to normal mode
   keymaps = { exit = '<A-q>', normal = '<A-n>' },
-  -- Terminal highlight group, default Normal
-  -- With it you can customize the background and default
-  -- foreground color since `{g,b}:terminal_color_x` will be used
-  -- as well for foreground, based on ANSI sequences
-  -- (see :h terminal TERMINAL COLORS)
-  terminal_hl = nil,
-  -- Custom VertSplit highlight group
-  split_hl = nil,
+  -- Highlight group for the terminal window,
+  -- links to NormalFloat by default
+  -- Use it to customize the background and default foreground 
+  -- colors.
+  -- Note that `g:terminal_color_x` will be used
+  -- (see :h terminal - TERMINAL COLORS)
+  hl_win = 'otermWin',
+  -- Highlight group for horizontal and vertical splits
+  -- links to WinSeparator by default
+  hl_split = 'otermSplit',
 
   -- `on_exit` a optional function to call when the terminal's job
   -- exits. It will receive the job ID and exit code as argument.
@@ -42,19 +46,23 @@ local _config = {
   -- Options passed to nvim_open_win (:h nvim_open_win())
   -- You can use it to customize various things like border etc.
   win_api = { style = 'minimal', relative = 'editor' },
-  -- Border highlight group, default FloatBorder
-  border_hl = nil,
+  -- Highlight group for borders, links to FloatBorder by default
+  hl_border = 'otermBorder',
 }
 
-local function init(config)
-  if config then
-    _config = vim.tbl_deep_extend('force', _config, config)
-  end
-end
+M._default_hls = {
+  hl_win = 'NormalFloat',
+  hl_split = 'WinSeparator',
+  hl_border = 'FloatBorder',
+}
 
-local function get_config()
+function M.init(config)
+  _config = vim.tbl_deep_extend('force', _config, config or {})
   return _config
 end
 
-local M = { get_config = get_config, init = init }
+function M.get_config()
+  return _config
+end
+
 return M

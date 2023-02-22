@@ -5,7 +5,6 @@
 local api = vim.api
 local get_floating_layout = require('oterm.layout').get_floating_layout
 local layout_map = require('oterm.layout').layout_map
-local is_floating = require('oterm.layout').is_floating
 
 local M = {}
 
@@ -13,7 +12,7 @@ function M.open_win(config)
   local buffer
   local window
   local layout = config.layout or 'vsplit'
-  if is_floating(layout) then
+  if config.floating then
     buffer = api.nvim_create_buf(true, false)
     local win_options = config.win_api
     win_options =
