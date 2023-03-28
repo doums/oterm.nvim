@@ -14,8 +14,7 @@ function M.win_hl_override(window, hl_group, value)
 end
 
 function M.hl_exists(name)
-  local status = pcall(vim.api.nvim_get_hl_by_name, name, {})
-  return status
+  return not vim.tbl_isempty(vim.api.nvim_get_hl(0, { name = name }))
 end
 
 return M
