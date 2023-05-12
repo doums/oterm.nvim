@@ -29,6 +29,7 @@ function M.open_win(config)
     vim.wo.number = false
     vim.wo.relativenumber = false
     vim.wo.signcolumn = 'no'
+    vim.wo.cursorline = false
     window = api.nvim_get_current_win()
     buffer = api.nvim_get_current_buf()
   end
