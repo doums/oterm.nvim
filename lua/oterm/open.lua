@@ -6,7 +6,7 @@ local api = vim.api
 local fn = vim.fn
 local cmd = vim.cmd
 local opt = vim.opt
-local uv = vim.loop
+local uv = vim.uv
 
 local _config = require('oterm.config')
 local open_win = require('oterm.window').open_win
