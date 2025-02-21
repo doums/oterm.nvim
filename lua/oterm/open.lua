@@ -60,7 +60,8 @@ local function open(config)
   if type(config.command) == 'string' and #config.command == 0 then
     config.command = nil
   end
-  local job_id = fn.termopen(config.command or { opt.shell:get() }, config)
+  config.term = true
+  local job_id = fn.jobstart(config.command or { opt.shell:get() }, config)
   create_keymaps(term.buffer, {
     [config.keymaps.exit] = '<Cmd>call jobstop(' .. job_id .. ')<CR>',
     [config.keymaps.normal] = '<C-\\><C-N>',
@@ -70,13 +71,17 @@ local function open(config)
     string.format('%s‹%s›', config.name, uv.random(2))
   )
   if job_id == 0 then
-    api.nvim_err_writeln(
-      '[oterm] termopen() failed, invalid argument (or job table is full)'
+    api.nvim_echo(
+      { '[oterm] jobstart() failed, invalid argument (or job table is full)\n' },
+      true,
+      { err = true }
     )
     return
   elseif job_id == -1 then
-    api.nvim_err_writeln(
-      '[oterm] termopen() failed, command or shell is not executable'
+    api.nvim_echo(
+      { '[oterm] jobstart() failed, command or shell is not executable' },
+      true,
+      { err = true }
     )
     return
   end
